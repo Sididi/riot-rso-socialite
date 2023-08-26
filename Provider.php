@@ -18,6 +18,7 @@ class Provider extends AbstractProvider
     protected $scopes = [
         'openid',
         'offline_access',
+        'cpid'
     ];
 
     /**
@@ -52,6 +53,8 @@ class Provider extends AbstractProvider
             ],
         ]);
 
+        // use returned cpid to call GET https://{cpid}.api.riotgames.com/lol/summoner/v4/summoners/me
+
         return json_decode($response->getBody(), true);
     }
 
@@ -61,7 +64,11 @@ class Provider extends AbstractProvider
     protected function mapUserToObject(array $user)
     {
         return (new User())->setRaw($user)->map([
-            'puuid'       => $user['puuid'],
+            // 'id'       => $user['id'],
+            // 'nickname' => $user['username'],
+            // 'name'     => $user['name'],
+            // 'email'    => $user['email'],
+            // 'avatar'   => $user['avatar'],
         ]);
     }
 
