@@ -53,9 +53,21 @@ class Provider extends AbstractProvider
             ],
         ]);
 
-        // use returned cpid to call GET https://{cpid}.api.riotgames.com/lol/summoner/v4/summoners/me
+        $cpid = json_decode($response->getBody(), true)['cpid'];
 
-        return json_decode($response->getBody(), true);
+        if ($cpid) {
+
+            $response = $this->getHttpClient()->get('https://' . $cpid . '.api.riotgames.com/lol/summoner/v4/summoners/me', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token,
+                ],
+            ]);
+
+            return json_decode($response->getBody(), true);
+        }
+
+        return null;
+
     }
 
     /**
@@ -64,11 +76,16 @@ class Provider extends AbstractProvider
     protected function mapUserToObject(array $user)
     {
         return (new User())->setRaw($user)->map([
-            // 'id'       => $user['id'],
-            // 'nickname' => $user['username'],
-            // 'name'     => $user['name'],
-            // 'email'    => $user['email'],
-            // 'avatar'   => $user['avatar'],
+            'id'       => $user['id'],
+            'nickname' => $user['name'],
+            'name'     => null,
+            'email'    => null,
+            'avatar'   => $user['profileIconId'], // TODO: get avatar from riot api,
+
+            'accountId' => $user['accountId'],
+            'puuid' => $user['puuid'],
+            'revisionDate' => $user['revisionDate'],
+            'summonerLevel' => $user['summonerLevel'],
         ]);
     }
 
