@@ -63,7 +63,7 @@ class Provider extends AbstractProvider
                 ],
             ]);
 
-            return json_decode($response->getBody(), true);
+            return json_decode($response->getBody(), true) + ['cpid' => $cpid];
         }
 
         return null;
@@ -86,6 +86,7 @@ class Provider extends AbstractProvider
             'puuid' => $user['puuid'],
             'revisionDate' => $user['revisionDate'],
             'summonerLevel' => $user['summonerLevel'],
+            'cpid' => $user['cpid'],
         ]);
     }
 
