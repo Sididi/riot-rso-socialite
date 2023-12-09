@@ -57,7 +57,7 @@ class Provider extends AbstractProvider
 
         if ($cpid) {
 
-            $response = $this->getHttpClient()->get('https://' . $cpid . '.api.riotgames.com/lol/summoner/v4/summoners/me', [
+            $response = $this->getHttpClient()->get('https://' . $cpid . '.api.riotgames.com/riot/account/v1/accounts/me', [
                 'headers' => [
                     'Authorization' => 'Bearer '.$token,
                 ],
@@ -75,17 +75,18 @@ class Provider extends AbstractProvider
      */
     protected function mapUserToObject(array $user)
     {
+        /* Commented fields should now be fetched from the /lol/summoner/v4/summoners/me endpoint through an additional call since Riot summoner names changes */
         return (new User())->setRaw($user)->map([
-            'id'       => $user['id'],
-            'nickname' => $user['name'],
-            'name'     => null,
+            'id'       => $user['puuid'], //$user['id'],
+            'nickname' => $user['gameName'] . '#' . $user['tagLine'],
+            'name'     => $user['gameName'] . '#' . $user['tagLine'],
             'email'    => null,
-            'avatar'   => $user['profileIconId'], // TODO: get avatar from riot api,
+            'avatar'   => null, //$user['profileIconId'],
 
-            'accountId' => $user['accountId'],
+            //'accountId' => $user['accountId'],
             'puuid' => $user['puuid'],
-            'revisionDate' => $user['revisionDate'],
-            'summonerLevel' => $user['summonerLevel'],
+            //'revisionDate' => $user['revisionDate'],
+            //'summonerLevel' => $user['summonerLevel'],
             'cpid' => $user['cpid'],
         ]);
     }
