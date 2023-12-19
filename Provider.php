@@ -57,7 +57,7 @@ class Provider extends AbstractProvider
 
         if ($cpid) {
 
-            $response = $this->getHttpClient()->get('https://' . $cpid . '.api.riotgames.com/riot/account/v1/accounts/me', [
+            $response = $this->getHttpClient()->get('https://europe.api.riotgames.com/riot/account/v1/accounts/me', [
                 'headers' => [
                     'Authorization' => 'Bearer '.$token,
                 ],
